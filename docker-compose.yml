@@ -1,16 +1,16 @@
 version: '3.8'
 services:
-
   postgres:
-    image: postgres:13.5
+    image: postgres:13
     restart: always
-    environment:
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword
-    volumes:
-      - postgres:/var/lib/postgresql/data
+    container_name: my-db
     ports:
-      - '5432:5432'
-
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - my-db:/var/lib/postgresql/data
 volumes:
-  postgres:
+  my-db:
