@@ -25,6 +25,11 @@ export class ArticlesController {
     return this.articlesService.findAll();
   }
 
+  @Get('unpublished')
+  findAllUnpublished() {
+    return this.articlesService.findAllUnpublished();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.articlesService.findOne(+id);
