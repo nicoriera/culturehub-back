@@ -10,6 +10,12 @@ export class CreateArticleDto {
   @ApiProperty()
   body: string;
 
+  @ApiProperty({ required: false })
+  author?: string;
+
+  @ApiProperty({ required: false })
+  image?: string;
+
   @ApiProperty({ required: false, default: false })
   published?: boolean = false;
 }
