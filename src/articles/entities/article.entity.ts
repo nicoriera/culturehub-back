@@ -22,4 +22,10 @@ export class ArticleEntity implements Article {
 
   @ApiProperty()
   updatedAt: Date;
+
+  @ApiProperty()
+  author: string;
+
+  @ApiProperty()
+  image: string;
 }
