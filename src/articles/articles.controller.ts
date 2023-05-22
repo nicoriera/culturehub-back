@@ -42,6 +42,12 @@ export class ArticlesController {
     return this.articlesService.findOne(+id);
   }
 
+  @Get('type/:typeId')
+  @ApiOkResponse({ type: ArticleEntity, isArray: true })
+  findByType(@Param('typeId') typeId: string) {
+    return this.articlesService.findByType(+typeId);
+  }
+
   @Patch(':id')
   @ApiOkResponse({ type: ArticleEntity })
   update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
