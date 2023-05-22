@@ -18,4 +18,7 @@ export class CreateArticleDto {
 
   @ApiProperty({ required: false, default: false })
   published?: boolean = false;
+
+  @ApiProperty({ default: 1 })
+  typeId: number;
 }
