@@ -1,48 +1,74 @@
-// prisma/seed.ts
-
 import { PrismaClient } from '@prisma/client';
 
-// initialize Prisma Client
-const prisma = new PrismaClient();
+async function seed() {
+  const prisma = new PrismaClient();
 
-async function main() {
-  // create two dummy articles
-  const post1 = await prisma.article.upsert({
-    where: { title: 'Prisma Adds Support for MongoDB' },
-    update: {},
-    create: {
-      title: 'Prisma Adds Support for MongoDB',
-      body: 'Support for MongoDB has been one of the most requested features since the initial release of...',
-      description:
-        "We are excited to share that today's Prisma ORM release adds stable support for MongoDB!",
-      published: false,
-      typeId: 1,
-    },
-  });
+  try {
+    // Création des types d'articles
+    const types = [];
+    for (const typeName of [
+      'Actualités',
+      'Tutoriels',
+      'Critiques',
+      'Musique',
+      'Cinéma',
+      'Jeux Vidéos',
+      'Livres',
+      'Séries',
+      'Manga',
+      'Anime',
+      'Technologies',
+      'Autres',
+    ]) {
+      const type = await prisma.type.create({
+        data: {
+          name: typeName,
+        },
+      });
+      types.push(type);
+    }
 
-  const post2 = await prisma.article.upsert({
-    where: { title: "What's new in Prisma? (Q1/22)" },
-    update: {},
-    create: {
-      title: "What's new in Prisma? (Q1/22)",
-      body: 'Our engineers have been working hard, issuing new releases with many improvements...',
-      description:
-        'Learn about everything in the Prisma ecosystem and community from January to March 2022.',
-      published: true,
-      typeId: 1,
-    },
-  });
+    // Création de deux articles fictifs
+    const article1 = await prisma.article.upsert({
+      where: { title: 'Prisma Ajoute le Support pour MongoDB' },
+      update: {},
+      create: {
+        title: 'Prisma Ajoute le Support pour MongoDB',
+        body: "Le support pour MongoDB a été l'une des fonctionnalités les plus demandées depuis la première version de...",
+        description:
+          'Nous sommes heureux de partager que la dernière version de Prisma ORM ajoute un support stable pour MongoDB !',
+        published: false,
+        author: 'Alice',
+        typeId: types[0].id,
+      },
+    });
 
-  console.log({ post1, post2 });
+    const article2 = await prisma.article.upsert({
+      where: { title: 'Quoi de Neuf dans Prisma ? (T1/22)' },
+      update: {},
+      create: {
+        title: 'Quoi de Neuf dans Prisma ? (T1/22)',
+        body: 'Nos ingénieurs ont travaillé dur, publiant de nouvelles versions avec de nombreuses améliorations...',
+        description:
+          "Découvrez tout ce qui s'est passé dans l'écosystème et la communauté Prisma de janvier à mars 2022.",
+        published: true,
+        author: 'Bob',
+        typeId: types[1].id,
+      },
+    });
+
+    console.log({ article1, article2 });
+  } catch (error) {
+    console.error(
+      "Erreur lors de l'ajout des données à la base de données :",
+      error,
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-// execute the main function
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    // close Prisma Client at the end
-    await prisma.$disconnect();
-  });
+seed().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
