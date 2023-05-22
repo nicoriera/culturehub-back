@@ -22,4 +22,14 @@ model Article {
   updatedAt   DateTime @updatedAt
   author      String?
   image       String?
+  typeId      Int      // Identifiant du type d'article
+  type        Type     @relation(fields: [typeId], references: [id])
+}
+
+
+
+model Type {
+  id        Int       @id @default(autoincrement())
+  name      String
+  articles  Article[] // Relation inverse
 }

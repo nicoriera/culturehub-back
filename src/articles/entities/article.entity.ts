@@ -28,4 +28,7 @@ export class ArticleEntity implements Article {
 
   @ApiProperty()
   image: string;
+
+  @ApiProperty()
+  typeId: number;
 }
