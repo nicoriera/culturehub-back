@@ -27,7 +27,14 @@ export class ArticlesService {
     return this.prisma.article.findMany({ where: { typeId } });
   }
 
-  update(id: number, updateArticleDto: UpdateArticleDto) {
+  async update(id: number, updateArticleDto: UpdateArticleDto) {
+    const existingArticle = await this.prisma.article.findUnique({
+      where: { id },
+    });
+    if (!existingArticle) {
+      throw new Error('Article not found');
+    }
+
     return this.prisma.article.update({
       where: { id },
       data: updateArticleDto,
